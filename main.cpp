@@ -13,6 +13,10 @@ struct Punto {
     int col;
 };
 
+long long medirTiempo(high_resolution_clock::time_point inicio){
+    auto fin = high_resolution_clock::now();
+    return duration_cast<microseconds>(fin - inicio).count();
+}
 // funcion para crear el tablero que se encuentra en memoria
 vector<vector<char>> crearTablero(int filas, int cols){
         vector<vector<char>> tablero(filas, vector<char>(cols, '#'));
@@ -88,10 +92,7 @@ void encontrarSalida(vector<vector<char>>& tablero, int fila, int col, int filas
    }
 
 }
-long long medirTiempo(high_resolution_clock::time_point inicio){
-    auto fin = high_resolution_clock::now();
-    return duration_cast<microseconds>(fin - inicio).count();
-}
+
 //main donde llamare a todas las funciones
 int main(){
     srand(time(0));
