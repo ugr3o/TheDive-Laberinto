@@ -3,8 +3,10 @@
 #include <cstdlib>
 #include <ctime>
 #include <queue>
+#include <chrono>
 
 using namespace std;
+using namespace chrono;
 
 struct Punto {
     int fila;
@@ -86,6 +88,10 @@ void encontrarSalida(vector<vector<char>>& tablero, int fila, int col, int filas
    }
 
 }
+long long medirTiempo(high_resolution_clock::time_point inicio){
+    auto fin = high_resolution_clock::now();
+    return duration_cast<microseconds>(fin - inicio).count();
+}
 //main donde llamare a todas las funciones
 int main(){
     srand(time(0));
@@ -98,12 +104,25 @@ int main(){
     cout << "Ingrese el numero de columnas: ";
     cin >> cols;
 
+    if(filas % 2 == 0) filas++;
+    if(cols % 2 == 0) cols++;
+
     vector<vector<char>> tablero = crearTablero(filas,cols);
-    tablero[1][1]= ' ';
+    tablero[1][1] = ' ';
+
+    auto inicio = high_resolution_clock::now();
     generarLaberinto(tablero,1,1,filas,cols);
+    cout << "Tiempo generacion: " << medirTiempo(inicio) << " microsegundos" << endl;
+
     entradaSalida(tablero,filas,cols);
+    tablero[0][1] = ' ';
+    tablero[filas-2][cols-1] = ' ';
     imprimirTablero(tablero,filas,cols);
-    encontrarSalida(tablero,1,1,filas,cols);
+
+    auto inicio2 = high_resolution_clock::now();
+    encontrarSalida(tablero,0,0,filas,cols);
+    cout << "Tiempo resolucion: " << medirTiempo(inicio2) << " microsegundos" << endl;
+
     imprimirTablero(tablero,filas,cols);
     return 0;
 }
